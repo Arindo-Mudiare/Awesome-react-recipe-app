@@ -21,18 +21,18 @@ export default class RecipeDetails extends Component {
     const url = `https://www.food2fork.com/api/get?key=2bf095be9ec0130efebf39fadb9742c1&q&rId=${id}`;
 
     // api call
-    try {
-      const data = await fetch(this.state.url);
-      const jsonData = await data.json();
-      this.setState(
-        (state, props) => {
-          return { recipe: jsonData.recipe };
-        },
-        () => {}
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    // try {
+    //   const data = await fetch(this.state.url);
+    //   const jsonData = await data.json();
+    //   this.setState(
+    //     (state, props) => {
+    //       return { recipe: jsonData.recipe };
+    //     },
+    //     () => {}
+    //   );
+    // } catch (error) {
+    //   console.log(error);
+    // }
   }
 
   render() {
@@ -45,7 +45,7 @@ export default class RecipeDetails extends Component {
       ingredients
     } = this.state.recipe;
     const { handleIndex } = this.props;
-    console.log(this.state.recipe);
+    // console.log(this.state.recipe);
     return (
       <React.Fragment>
         <div className="container">

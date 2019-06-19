@@ -9,9 +9,14 @@ class App extends Component {
   state = {
     recipes: recipes,
     url:
-      "https://www.food2fork.com/api/search?key=2bf095be9ec0130efebf39fadb9742c1&q=chicken%20breast&page=2",
+      "https://www.food2fork.com/api/search?key=2bf095be9ec0130efebf39fadb9742c1",
+    base_url:
+      "https://www.food2fork.com/api/search?key=2bf095be9ec0130efebf39fadb9742c1",
     details_id: "8c0314",
-    pageIndex: 1
+    pageIndex: 1,
+    search: "",
+    query: "&q=",
+    error: ""
   };
 
   // method for api call
@@ -19,9 +24,18 @@ class App extends Component {
     try {
       const data = await fetch(this.state.url);
       const jsonData = await data.json();
-      this.setState({
-        recipes: jsonData.recipes
-      });
+
+      if (jsonData.recipes.length === 0) {
+        this.setState(() => {
+          return {
+            error: "Sorry, your search no carry weight nwanne!!"
+          };
+        });
+      } else {
+        this.setState({
+          recipes: jsonData.recipes
+        });
+      }
     } catch (error) {
       console.log(error);
     }
@@ -41,6 +55,10 @@ class App extends Component {
             key={this.state.recipes.recipe_id}
             recipes={this.state.recipes}
             handleDetails={this.handleDetails}
+            value={this.state.search}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+            error={this.state.error}
           />
         );
       case 0:
@@ -64,6 +82,34 @@ class App extends Component {
       pageIndex: index,
       details_id: id
     });
+  };
+
+  // search methods
+  handleChange = e => {
+    this.setState(
+      {
+        search: e.target.value
+      },
+      () => {
+        // console.log(this.state.search);
+      }
+    );
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    const { base_url, query, search } = this.state;
+    this.setState(
+      () => {
+        return {
+          url: `${base_url}${query}${search}`,
+          search: ""
+        };
+      },
+      () => {
+        this.getRecipes();
+      }
+    );
   };
 
   // Render method
